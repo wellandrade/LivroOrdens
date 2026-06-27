@@ -1,0 +1,11 @@
+# Build
+bin/
+obj/
+
+# Visual Studio
+.vs/
+.vscode/
+
+# Logs
+log/
+store/

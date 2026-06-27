@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="src/LivroOrdens.API/LivroOrdens.API.csproj" />
+  <Project Path="src/LivroOrdens.Aplicacao/LivroOrdens.Aplicacao.csproj" />
+  <Project Path="src/LivroOrdens.Client/LivroOrdens.Cliente.csproj" />
+  <Project Path="src/LivroOrdens.Dominio/LivroOrdens.Dominio.csproj" />
+  <Project Path="src/LivroOrdens.Fix/LivroOrdens.Fix.csproj" />
+  <Project Path="src/LivroOrdens.Infra/LivroOrdens.Infra.csproj" />
+  <Project Path="tests/LivroOrdens.Tests/LivroOrdens.Tests.csproj" Id="691c5724-e470-4833-b1b3-b9dd8f43e975" />
+</Solution>

@@ -1,0 +1,16 @@
+services:
+    livroordens-api:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: livroordens-api
+        ports:
+            - "8080:8080"
+        deploy:
+            resources:
+                limits:
+                    cpus: "1.0"
+                    memory: 2G
+        
+            
+            
