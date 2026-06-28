@@ -1,6 +1,9 @@
 ﻿using LivroOrdens.Aplicacao.UserCase.CancelarOrdem;
 using LivroOrdens.Aplicacao.UserCase.CriarOrdem;
+using LivroOrdens.Aplicacao.UserCase.ObterLivrosOrdens;
 using LivroOrdens.Dominio.Enum;
+using LivroOrdens.Fix.Cliente.Session;
+using LivroOrdens.Fix.Constantes;
 using QuickFix;
 using QuickFix.Fields;
 
@@ -10,15 +13,19 @@ namespace LivroOrdens.Fix.Server.Application
     {
         private readonly CriarOrdemUseCase _criarOrdemUseCase;
         private readonly CancelarOrdemUseCase _cancelarOrdemUseCase;
+        private readonly ObterLivrosOrdensUseCase _obterLivrosOrdensUseCase;
 
         public ServerFixApplication(CriarOrdemUseCase criarOrdemUseCase,
-            CancelarOrdemUseCase cancelarOrdemUseCase)
+            CancelarOrdemUseCase cancelarOrdemUseCase,
+            ObterLivrosOrdensUseCase obterLivrosOrdensUseCase)
         {
             _criarOrdemUseCase = criarOrdemUseCase;
             _cancelarOrdemUseCase = cancelarOrdemUseCase;
+            _obterLivrosOrdensUseCase = obterLivrosOrdensUseCase;
         }
 
-        public void FromAdmin(Message message, SessionID sessionID) { }
+        public void FromAdmin(Message message, SessionID sessionID) {
+        }
 
         public async void FromApp(Message message, SessionID sessionID)
         {
@@ -32,6 +39,9 @@ namespace LivroOrdens.Fix.Server.Application
                 case MsgType.ORDERCANCELREQUEST:
                     await ProcessarCancelamentoOrdem(message, sessionID);
                     break;
+                case FixCustomeMessageTypes.BookSnapshotRequest:
+                    await ProcessarSnapShotLivro(message, sessionID);
+                    break;
                 default:
                     break;
             }
@@ -39,7 +49,8 @@ namespace LivroOrdens.Fix.Server.Application
 
         public void OnCreate(SessionID sessionID) { }
 
-        public void OnLogon(SessionID sessionID) { }
+        public void OnLogon(SessionID sessionID) {
+        }
 
         public void OnLogout(SessionID sessionID) { }
 
@@ -102,6 +113,22 @@ namespace LivroOrdens.Fix.Server.Application
             Session.SendToTarget(executionReport, sessionID);
         }
 
+        public async Task ProcessarSnapShotLivro(Message message, SessionID sessionID) 
+        {
+            var requestId = message.GetString(9001);
+
+            var resultado = await _obterLivrosOrdensUseCase.Executar();
+
+            var json = System.Text.Json.JsonSerializer.Serialize(resultado);
+
+            var resposta = new Message();
+            resposta.Header.SetField(new MsgType(FixCustomeMessageTypes.BookSnapshotResponse));
+            resposta.SetField(new StringField(9001, requestId));
+            resposta.SetField(new StringField(9002, json));
+
+            Session.SendToTarget(resposta, sessionID);
+        }
+
         private static (char execType, char ordStatus) ObterStatus(bool sucesso, bool cancelamento)
         {
             if (cancelamento)
@@ -113,3 +140,4 @@ namespace LivroOrdens.Fix.Server.Application
         }
     }
 }
+;

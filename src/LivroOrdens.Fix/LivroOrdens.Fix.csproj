@@ -8,15 +8,11 @@
 
   <ItemGroup>
     <None Remove="Cliente\Config\cliente.cfg" />
-    <None Remove="Server\Config\servidor.cfg" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Cliente\Config\cliente.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Server\Config\servidor.cfg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "src\\LivroOrdens.Server.Worker\\LivroOrdens.Server.Worker.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\LivroOrdens.API\\LivroOrdens.API.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

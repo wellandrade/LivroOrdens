@@ -4,14 +4,17 @@ using LivroOrdens.Aplicacao.UserCase.CriarOrdem;
 using LivroOrdens.Aplicacao.UserCase.ObterLivrosOrdens;
 using LivroOrdens.Dominio.Enum;
 using LivroOrdens.Fix.Cliente.Session;
+using LivroOrdens.Fix.Constantes;
 using QuickFix.Fields;
 using QuickFix.FIX44;
+using System.Collections.Concurrent;
 
 namespace LivroOrdens.Fix.Cliente.Services
 {
     public class FixClienteService : IFixClienteService
     {
         private readonly ClienteFixSession _clienteFixSession;
+        private static readonly ConcurrentDictionary<string, TaskCompletionSource<ObterLivrosOrdensResponse>> _snapshotsPendentes = new();
 
         public FixClienteService(ClienteFixSession clienteFixSession)
         {
@@ -35,8 +38,7 @@ namespace LivroOrdens.Fix.Cliente.Services
             mensagem.Set(new OrderQty(request.Quantidade));
             mensagem.Set(new Price(request.Preco));
 
-
-            QuickFix.Session.SendToTarget(mensagem, _clienteFixSession.SessionID); 
+            QuickFix.Session.SendToTarget(mensagem, _clienteFixSession.SessionID);
 
             return Task.FromResult(new CriarOrdemResponse
             {
@@ -77,14 +79,46 @@ namespace LivroOrdens.Fix.Cliente.Services
                 Sucesso = true,
                 Mensagem = "Livros de ordens obtidos com sucesso.",
                 LivrosOrdens = []
-            }); 
+            });
         }
 
         private static char ObterSide(EAcaoOrdem acaoOrdem) => EAcaoOrdem.Comprar == acaoOrdem ? Side.BUY : Side.SELL;
 
-        private bool SessaoConectada()
+        public async Task<ObterLivrosOrdensResponse> ObterLivroOrdens()
         {
-            return _clienteFixSession.SessionID is not null;
+            var sessionID = _clienteFixSession.SessionID;
+
+            if (sessionID is null)
+            {
+                return new ObterLivrosOrdensResponse
+                {
+                    Sucesso = false,
+                    Mensagem = "Sessão FIX não está conectada."
+                };
+            }
+
+            var requestId = Guid.NewGuid().ToString();
+
+            var task = new TaskCompletionSource<ObterLivrosOrdensResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            _snapshotsPendentes.TryAdd(requestId, task);
+
+            var mensagem = new QuickFix.Message();
+
+            mensagem.Header.SetField(new MsgType(FixCustomeMessageTypes.BookSnapshotRequest));
+            mensagem.SetField(new StringField(9001, requestId));
+
+            QuickFix.Session.SendToTarget(mensagem, sessionID);
+
+            return await task.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        }
+
+        public static void CompletarSnapshotLivro(string requestId, ObterLivrosOrdensResponse response)
+        {
+            if (_snapshotsPendentes.TryRemove(requestId, out var tcs))
+            {
+                tcs.SetResult(response);
+            }
         }
     }
 }

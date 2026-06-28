@@ -7,10 +7,10 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddFixClient();
-builder.Services.AddFixServer();
+//builder.Services.AddFixServer();
 builder.Services.AddApplication();
 builder.Services.AddInfra();
+builder.Services.AddFixClient();
 
 var app = builder.Build();
 app.UseMiddleware<RequestLoggingMiddleware>();

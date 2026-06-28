@@ -17,7 +17,7 @@ namespace LivroOrdens.Aplicacao.UserCase.EnviarOrdem
         [Range(1, 100_000)]
         public int Quantidade { get; set; }
 
-        [Range(typeof(decimal), "0.01", "1000")]
+        [Range(0.01, 1000)]
         public decimal Preco { get; set; }
 
     }

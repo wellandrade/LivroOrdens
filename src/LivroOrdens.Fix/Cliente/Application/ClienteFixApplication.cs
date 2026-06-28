@@ -1,6 +1,10 @@
-﻿using LivroOrdens.Fix.Cliente.Session;
+﻿using LivroOrdens.Aplicacao.UserCase.ObterLivrosOrdens;
+using LivroOrdens.Fix.Cliente.Services;
+using LivroOrdens.Fix.Cliente.Session;
+using LivroOrdens.Fix.Constantes;
 using QuickFix;
 using QuickFix.Fields;
+using System.Text.Json;
 
 namespace LivroOrdens.Fix.Cliente.Application
 {
@@ -19,7 +23,14 @@ namespace LivroOrdens.Fix.Cliente.Application
 
         public void FromApp(Message message, SessionID sessionID)
         {
+            var msgType = message.Header.GetString(Tags.MsgType);
 
+            switch (msgType)
+            {
+                case FixCustomeMessageTypes.BookSnapshotResponse:
+                    ProcessarRespostaSnapshotLivro(message);
+                    break;
+            }
         }
 
         public void OnCreate(SessionID sessionID)
@@ -42,6 +53,30 @@ namespace LivroOrdens.Fix.Cliente.Application
 
         public void ToApp(Message message, SessionID sessionID)
         {
+        }
+
+        private void ProcessarRespostaSnapshotLivro(Message message)
+        {
+            try
+            {
+                var requestId = message.GetString(9001);
+                var json = message.GetString(9002);
+
+                var response = JsonSerializer.Deserialize<ObterLivrosOrdensResponse>(json)
+                ?? new ObterLivrosOrdensResponse
+                {
+                    Sucesso = false,
+                    Mensagem = "Não foi possível desserializar o snapshot do livro."
+                };
+
+                FixClienteService.CompletarSnapshotLivro(requestId, response);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }

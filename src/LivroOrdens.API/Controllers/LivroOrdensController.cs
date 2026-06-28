@@ -1,4 +1,4 @@
-﻿using LivroOrdens.Aplicacao.UserCase.ObterLivrosOrdens;
+﻿using LivroOrdens.Aplicacao.Interfaces.Fix.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LivroOrdens.API.Controllers
@@ -7,17 +7,17 @@ namespace LivroOrdens.API.Controllers
     [ApiController]
     public class LivroOrdensController : ControllerBase
     {
-        private readonly ObterLivrosOrdensUseCase _obterLivrosOrdensUseCase;
+        private readonly IFixClienteService _fixClienteService;
 
-        public LivroOrdensController(ObterLivrosOrdensUseCase obterLivrosOrdensUseCase)
+        public LivroOrdensController(IFixClienteService fixClienteService)
         {
-            _obterLivrosOrdensUseCase = obterLivrosOrdensUseCase;
+            _fixClienteService = fixClienteService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Obter()
         {
-            var response = await _obterLivrosOrdensUseCase.Executar();
+            var response = await _fixClienteService.ObterLivroOrdens();
 
             return response.Sucesso ? Ok(response) : BadRequest(response);
         }

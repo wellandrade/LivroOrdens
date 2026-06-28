@@ -1,16 +1,24 @@
 services:
+    livroordens-server:
+        build:
+            context: .
+            dockerfile: src/LivroOrdens.Server.Worker/Dockerfile
+        container_name: livroordens-server
+        ports:
+            - "5001:5001"
+            
+        cpus: "1.0"
+        mem_limit: 2g
+        
     livroordens-api:
         build:
             context: .
             dockerfile: Dockerfile
         container_name: livroordens-api
-        ports:
+        ports: 
             - "8080:8080"
-        deploy:
-            resources:
-                limits:
-                    cpus: "1.0"
-                    memory: 2G
-        
+        depends_on:
+            - livroordens-server
             
-            
+        cpus: "1.0"
+        mem_limit: 2g

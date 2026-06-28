@@ -1,0 +1,12 @@
+namespace LivroOrdem.Server.Worker
+{
+    public class Worker(ILogger<Worker> logger) : BackgroundService
+    {
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            logger.LogInformation("**** Server FIX Worker iniciado. ****");
+
+            await Task.Delay(Timeout.Infinite, stoppingToken);
+        }
+    }
+}

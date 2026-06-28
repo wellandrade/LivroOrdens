@@ -5,5 +5,6 @@
   <Project Path="src/LivroOrdens.Dominio/LivroOrdens.Dominio.csproj" />
   <Project Path="src/LivroOrdens.Fix/LivroOrdens.Fix.csproj" />
   <Project Path="src/LivroOrdens.Infra/LivroOrdens.Infra.csproj" />
+  <Project Path="src/LivroOrdens.Server.Worker/LivroOrdens.Server.Worker.csproj" Id="598027f3-a134-4468-92b9-e2cdd2eb8211" />
   <Project Path="tests/LivroOrdens.Tests/LivroOrdens.Tests.csproj" Id="691c5724-e470-4833-b1b3-b9dd8f43e975" />
 </Solution>

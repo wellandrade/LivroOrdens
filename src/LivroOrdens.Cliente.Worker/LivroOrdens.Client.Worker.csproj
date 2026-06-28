@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-LivroOrdens.Cliente.Worker-fc3db5ae-0c90-4697-a416-ad72b28924aa</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LivroOrdens.Aplicacao\LivroOrdens.Aplicacao.csproj" />
+    <ProjectReference Include="..\LivroOrdens.Fix\LivroOrdens.Fix.csproj" />
+    <ProjectReference Include="..\LivroOrdens.Infra\LivroOrdens.Infra.csproj" />
+  </ItemGroup>
+</Project>

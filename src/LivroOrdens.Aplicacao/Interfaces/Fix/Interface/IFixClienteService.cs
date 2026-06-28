@@ -9,5 +9,7 @@ namespace LivroOrdens.Aplicacao.Interfaces.Fix.Interface
         Task<CriarOrdemResponse> EnviarNovaOrdem(CriarOrdermRequest request);
         Task<CancelarOrdemResponse> CancelarOrdem(CancelarOrdemRequest request);
         Task<ObterLivrosOrdensResponse> ObterLivrosOrdens(ObterLivrosOrdensRequest request);
+
+        Task<ObterLivrosOrdensResponse> ObterLivroOrdens();
     }
 }

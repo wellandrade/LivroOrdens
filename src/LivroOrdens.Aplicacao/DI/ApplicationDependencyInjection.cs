@@ -19,5 +19,14 @@ namespace LivroOrdens.Aplicacao.DI
 
             return services;
         }
+
+        public static IServiceCollection AddServerApplication(this IServiceCollection services)
+        {
+            services.AddSingleton<CriarOrdemUseCase>();
+            services.AddSingleton<CancelarOrdemUseCase>();
+            services.AddSingleton<ObterLivrosOrdensUseCase>();
+
+            return services;
+        }
     }
 }

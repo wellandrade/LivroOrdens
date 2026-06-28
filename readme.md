@@ -23,6 +23,7 @@ src
 ├── LivroOrdens.Infra
 ├── LivroOrdens.Cliente
 └── LivroOrdens.Fix
+└── LivroOrdens.Server.Worker
 
 tests
 └── LivroOrdens.Tests
@@ -121,6 +122,15 @@ http://localhost:8080/scalar
 dotnet test
 ```
 ---
+
+## DOCKERT
+Ao executar o docker compose up --build
+serão iniciados:
+
+- API REST
+- Servidor Fix (Worker)
+
+A API envia mensagens FIX ao servidor para criação, cancelamento e consulta do livro de ordens
 
 ## Testes implementados
 ### Domínio

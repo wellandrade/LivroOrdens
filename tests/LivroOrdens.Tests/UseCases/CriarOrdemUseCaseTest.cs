@@ -5,7 +5,7 @@ using LivroOrdens.Infra.Repository;
 
 namespace LivroOrdens.Tests.UseCases
 {
-    public class CriarOrdemUseCasesTest
+    public class CriarOrdemUseCaseTest
     {
         [Fact]
         public async Task Executar_DeveCriarOrdem_QuandoRequestForValido()

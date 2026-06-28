@@ -26,6 +26,7 @@ namespace LivroOrdens.Aplicacao.UserCase.ObterLivrosOrdens
                     Lado = x.Lado,
                     Quantidade = x.Quantidade,
                     Preco = x.Preco,
+                    CriadaEm = x.CriadEm
                 }).ToList();
 
             return new ObterLivrosOrdensResponse
